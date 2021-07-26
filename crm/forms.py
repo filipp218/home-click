@@ -7,7 +7,7 @@ from .models import Task
 class ProfileForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']
+        fields = ["username", "password", "email"]
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -20,10 +20,10 @@ class ProfileForm(ModelForm):
 class AuthProfileForm(AuthenticationForm, ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ["username", "password"]
 
 
 class AuthorForm(ModelForm):
     class Meta:
         model = Task
-        exclude = ('date', 'author', 'status', 'worker')
+        exclude = ("date", "author", "status", "worker")

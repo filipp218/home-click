@@ -13,5 +13,4 @@ urlpatterns = [
     path("client", views.ClientList.as_view()),
     path("worker/", views.WorkerList.as_view()),
     path("worker/<int:pk>", views.WorkerListId.as_view()),
-
 ]

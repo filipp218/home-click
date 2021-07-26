@@ -12,9 +12,7 @@ from django.db.models import Q
 class MainView(View):
     def get(self, request):
         if not request.user.is_authenticated:
-            return render(
-                request, "crm/main.html", {}
-            )
+            return render(request, "crm/main.html", {})
         elif request.user.is_authenticated and not request.user.is_staff:
             return redirect(f"/client")
 
@@ -25,26 +23,26 @@ class MainView(View):
 class ProfileLogin(View):
     def get(self, request):
         form = AuthProfileForm()
-        data = {'form': form}
-        return render(request, 'crm/auth.html', data)
+        data = {"form": form}
+        return render(request, "crm/auth.html", data)
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(username=username, password=password)
-        if request.path == '/client/auth':
+        if request.path == "/client/auth":
             if user and user.is_active:
                 login(request, user)
                 return redirect(f"/client")
-        elif request.path == '/worker/auth':
+        elif request.path == "/worker/auth":
             if user and user.is_active and user.is_staff:
                 login(request, user)
                 return redirect(f"/worker")
 
         form = AuthProfileForm(request.POST)
         error = "The username or password were incorrect"
-        data = {'error': error, 'form' : form}
-        return render(request, 'crm/auth.html', data)
+        data = {"error": error, "form": form}
+        return render(request, "crm/auth.html", data)
 
 
 class ProfileLogout(View):
@@ -54,25 +52,25 @@ class ProfileLogout(View):
 
 
 class NewProfile(View):
-
     def get(self, request):
-        if not request.path == '/client/registration':
+        if not request.path == "/client/registration":
             return redirect("/")
         form = ProfileForm()
-        data = {'form': form}
-        return render(request, 'crm/auth.html', data)
+        data = {"form": form}
+        return render(request, "crm/auth.html", data)
 
     def post(self, request):
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            username,password = form.save()
+            username, password = form.save()
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect("/")
         form = ProfileForm()
         error = "Какое-то поле не пустое или такой логин уже есть"
-        data = {'error': error, 'form': form}
-        return render(request, 'crm/auth.html', data)
+        data = {"error": error, "form": form}
+        return render(request, "crm/auth.html", data)
+
 
 class TaskCreate(CreateView):
     form_class = AuthorForm
@@ -83,24 +81,22 @@ class TaskCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.status = 'Открытая'
+        form.instance.status = "Открытая"
         return super(TaskCreate, self).form_valid(form)
 
 
 class ClientList(View):
-
     def get(self, request):
         if not request.user.is_authenticated:
-            return redirect('/')
+            return redirect("/")
         queryset = Task.objects.filter(author=request.user)
-        data = {"tasks":queryset}
+        data = {"tasks": queryset}
         if not queryset:
-            data["error"] = 'Пока вы не оставили ни одной заявки'
+            data["error"] = "Пока вы не оставили ни одной заявки"
         return render(request, "crm/client_task.html", data)
 
 
 class Types:
-
     def get_types(self):
         return Task.TYPE_CHOICES
 
@@ -115,7 +111,7 @@ class WorkerList(ListView, Types):
 
     def get(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated:
-            return redirect('/')
+            return redirect("/")
         self.object_list = self.get_queryset()
         context = self.get_context_data()
         return self.render_to_response(context)
@@ -143,12 +139,12 @@ class WorkerList(ListView, Types):
         if "from_date" in self.request.GET:
             date = self.request.GET["from_date"]
             if date:
-                date = datetime.strptime(date,"%Y-%m-%d")
+                date = datetime.strptime(date, "%Y-%m-%d")
                 queryset = queryset.filter(date__gte=date)
         if "to_date" in self.request.GET:
             date = self.request.GET["to_date"]
             if date:
-                date = datetime.strptime(date,"%Y-%m-%d")
+                date = datetime.strptime(date, "%Y-%m-%d")
                 queryset = queryset.filter(date__lte=date)
         queryset = queryset.filter(filters)
         return queryset
@@ -157,23 +153,24 @@ class WorkerList(ListView, Types):
 class TaskInProcess(View):
     def get(self, request, pk):
         if not request.user.is_staff:
-            redirect('/')
+            redirect("/")
         task = Task.objects.get(id=pk)
-        task.status = 'В процессе'
+        task.status = "В процессе"
         task.worker = request.user
         task.save()
-        return redirect('/worker')
+        return redirect("/worker")
+
 
 class TaskDone(View):
     def get(self, request, pk):
         if not request.user.is_staff:
-            redirect('/')
+            redirect("/")
         task = Task.objects.get(id=pk)
         if request.user == task.worker:
-            task.status = 'Закрыта'
+            task.status = "Закрыта"
             task.worker = request.user
             task.save()
-        return redirect('/worker')
+        return redirect("/worker")
 
 
 class WorkerListId(ListView, Types):
@@ -182,8 +179,8 @@ class WorkerListId(ListView, Types):
     template_name = "crm/worker_list.html"
 
     def get_queryset(self):
-        if self.request.user.id == self.kwargs['pk']:
-            queryset = Task.objects.filter(worker_id=self.kwargs['pk'])
+        if self.request.user.id == self.kwargs["pk"]:
+            queryset = Task.objects.filter(worker_id=self.kwargs["pk"])
         else:
             queryset = Task.objects.all()
 
