@@ -1,0 +1,74 @@
+{% extends 'crm/base.html' %}
+ {% load static %}
+
+{% block title %}
+  Заявки
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+        <h1> Все заявки </h1>
+</div>
+
+<div class="container">
+<form>
+    <h6>Фильтровать заявки по типу</h6>
+    {%for typ in view.get_types%}
+        <div class="form-check">
+            <input class="form-check-input" name="type" type="checkbox" value="{{typ.0}}" id="{{typ.0}}">
+            <label class="form-check-label" for="{{typ.0}}">
+            {{typ.0}}
+            </label>
+        </div>
+    {%endfor%}
+<br>
+    <h6>Фильтровать заявки по статусу</h6>
+    {%for typ in view.get_status%}
+        <div class="form-check">
+            <input class="form-check-input" name="status" type="checkbox" value="{{typ.0}}" id="{{typ.0}}">
+            <label class="form-check-label" for="{{typ.0}}">
+            {{typ.0}}
+            </label>
+        </div>
+    {%endfor%}
+<br>
+    <h6>Фильтровать по дате</h6>
+    От <input type="date" name="from_date">
+    До <input type="date" name="to_date">
+<br>
+<br>
+    <p><input class = "btn btn-primary" type="submit"  value="Отправить"></p>
+</form>
+
+
+
+
+<br>
+<div class="container">
+  {% for task in tasks %}
+        <div class="card">
+          <div class="card-header">
+            {{task.date}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Тип: {{task.type}}</h5>
+            <p class="card-text">{{ task.description}}<br> Клиент {{ task.author }}, контакт {{ task.author.email }}</p>
+              {% if task.status == "Открытая" %}
+              <a class="btn btn-primary" href="/task/{{task.id}}" role="button">Взять в работу</a>
+              {% endif %}
+              {% if task.status == "В процессе" and task.worker != request.user%}
+                  <a>Заявку выполняет сотрудник: {{ task.worker.first_name}} {{task.worker.last_name}} </a>
+              {% endif %}
+              {% if task.status == "В процессе" and task.worker == request.user%}
+                  <a class="btn btn-primary" href="/task-done/{{task.id}}" role="button">Завершил</a>
+              {% endif %}
+              {% if task.status == "Закрыта" %}
+                  <a>Заявку выполнил сотрудник: {{ task.worker.first_name}} {{task.worker.last_name}} </a>
+              {% endif %}
+
+          </div>
+        </div>
+  {% endfor %}
+ </div>
+{% endblock %}

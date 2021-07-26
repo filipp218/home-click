@@ -1,0 +1,33 @@
+{% extends 'crm/base.html' %}
+ {% load static %}
+
+{% block title %}
+  Мои заявки
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+      <h1> Мои заявки </h1>
+</div>
+
+<div class="container">
+  {% for task in tasks %}
+        <div class="card">
+          <div class="card-header">
+            {{task.date}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Статус: {{ task.status }}  {{task.worker}}</h5>
+            <p class="card-text">{{ task.description}}</p>
+          </div>
+        </div>
+  {% endfor %}
+  <h3> {{ error }}</h3>
+<br>
+<div class="row">
+<a class="btn btn-primary" href="/task" role="button">Оставить заявку</a>
+      </div>
+ </div>
+
+{% endblock %}

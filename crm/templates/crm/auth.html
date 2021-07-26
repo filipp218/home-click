@@ -1,0 +1,26 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+{% block title %}
+  Регистрация
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+            <div class="features">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form}}<br>
+                    {{error}}<br>
+                    <button type= "submit" class = "btn btn-primary mt-4">Войти</button>
+                    <br><br>
+                </form>
+                {% if request.path == '/client/auth' %}
+                    <a class="btn btn-primary" href="/client/registration" role="button">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

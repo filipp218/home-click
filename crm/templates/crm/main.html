@@ -1,0 +1,33 @@
+{% extends 'crm/base.html' %}
+ {% load static %}
+
+{% block title %}
+  CRM
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h1> Лучший сервис по ремонту техники</h1>
+    <p><big><big>Ремонт, обслуживание, консультации </big></big></p>
+</div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Для сотрудников</h5>
+            <p class="card-text">Если вы являетесь сотрудником, вам сюда!</p>
+            <a href="/worker/auth" class="btn btn-primary">Сотрудник</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Для клиентов</h5>
+            <p class="card-text">Если вы хотите оставить заявку, вам сюда!</p>
+            <a href="/client/auth" class="btn btn-primary">Клиент</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

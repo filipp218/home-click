@@ -1,0 +1,29 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+{% block title %}
+  Создать заявку
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+            <div class="features">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    Описание<br>
+                    {{form.description}}<br>
+                    Тип заявки<br>
+                    {{form.type}}<br>
+                    <br>
+                    <br>
+                    <span>{{error}}</span>
+                    <br>
+                    <button type= "submit" class = "btn btn-primary">Отправить</button>
+                    <br><br>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
