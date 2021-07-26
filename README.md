@@ -57,7 +57,7 @@ filipp218@gmail.com
 # О работе сервиса
 
 На главной странице пользователь должен выбрать, в качество кого он пришёл на сайт:
-![ScreenShot](hhttps://github.com/filipp218/home-click/blob/main/screen/main.png)
+![ScreenShot](https://github.com/filipp218/home-click/blob/main/screen/main.png)
 
 - Если в качестве пользователя у него есть возможность зарегестрироваться или авторизоваться 
 и оставить заявку. Также он может следить за статусом заявку и кто ей занимается.
